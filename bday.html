@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Kana 🎀</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+@font-face {
+  font-family: "Honey";
+  src: url("honey.ttf") format("truetype");
+  font-display: swap;
+}
+
+:root {
+  --pink: #FFB6C1;
+  --rose: #F8A5B8;
+  --blue: #B2EBF2;
+  --white: #FFF9FB;
+  --ink: #6B4C5B;
+  --shadow: 0 14px 34px rgba(255,182,193,.3);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; }
+
+body {
+  font-family: "Honey", "Fredoka", sans-serif;
+  color: var(--ink);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 15% 20%, #FFE9F0, transparent 45%),
+    radial-gradient(circle at 85% 15%, #DFF6FB, transparent 45%),
+    linear-gradient(160deg, #FFF9FB, #E0F7FA, #FFC0CB);
+}
+
+button { font: inherit; }
+button:not(:disabled) { cursor: pointer; }
+button:focus-visible {
+  outline: 3px solid #a98bd4;
+  outline-offset: 5px;
+}
+[hidden] { display: none !important; }
+
+.scene {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--fade, 900ms) ease;
+}
+.scene.visible { visibility: visible; }
+.scene.active { opacity: 1; pointer-events: auto; }
+.scene.leaving { pointer-events: none; }
+
+.card {
+  width: min(680px, 100%);
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  background: rgba(255,255,255,.85);
+  border: 2px solid rgba(255,255,255,.8);
+  border-radius: 32px;
+  padding: 30px 24px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(8px);
+}
+
+h1 {
+  font-size: clamp(1.8rem, 6vw, 3rem);
+  line-height: 1.2;
+  color: #E86A8A;
+}
+h2 {
+  font-size: clamp(1.5rem, 5vw, 2.3rem);
+  color: #5FA8C6;
+  line-height: 1.25;
+}
+p {
+  font-size: clamp(.98rem, 3.6vw, 1.1rem);
+  line-height: 1.75;
+  margin-top: 14px;
+}
+
+.btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 14px 28px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  background: linear-gradient(135deg, var(--pink), var(--rose));
+  color: #fff;
+  box-shadow: 0 9px 22px rgba(232,106,138,.25);
+  transition: filter .2s ease, scale .2s ease;
+}
+.btn:hover { filter: brightness(1.05); scale: 1.03; }
+.btn:active { scale: .97; }
+.btn-blue {
+  background: linear-gradient(135deg, #B2EBF2, #8FD8E8);
+  color: #33596B;
+}
+.button-row { margin-top: 24px; }
+
+.choice-arena {
+  width: min(390px, 100%);
+  height: 150px;
+  margin: 20px auto 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  align-items: center;
+}
+.yes-slot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.dodge-zone {
+  position: relative;
+  width: 100%;
+  height: 140px;
+  overflow: hidden;
+  border-radius: 22px;
+}
+.dodge-btn {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  padding: 13px 19px;
+  max-width: calc(100% - 16px);
+  white-space: nowrap;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 6px 14px rgba(178,235,242,.4);
+  transition: left .15s ease, top .15s ease;
+  scale: 1 !important;
+  touch-action: none;
+}
+.choice-arena.enter { animation: dropBounce .9s ease both; }
+
+@keyframes dropBounce {
+  0% { opacity: 0; transform: translateY(-30px); }
+  65% { opacity: 1; transform: translateY(7px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.intro-text {
+  font-size: clamp(1.4rem, 5.5vw, 2.2rem);
+  color: #E86A8A;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+.intro-text.show { opacity: 1; }
+
+.slow-card {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 2.2s ease, transform 2.2s ease;
+}
+.active .slow-card { opacity: 1; transform: translateY(0); }
+
+/* Cake */
+.cake-wrap { width: min(240px, 65vw); margin: 20px auto 0; }
+.cake { display: block; width: 100%; }
+.flame {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: flicker 1s ease-in-out infinite alternate;
+}
+.flame.out { animation: blowOut .5s ease forwards; }
+
+@keyframes flicker {
+  to { transform: scale(1.12) rotate(5deg); }
+}
+@keyframes blowOut {
+  to { opacity: 0; transform: scale(.1) translateY(-15px); }
+}
+
+/* Balloons */
+.balloon-area {
+  position: relative;
+  height: min(350px, 45dvh);
+  min-height: 260px;
+  margin-top: 24px;
+}
+.balloon {
+  position: absolute;
+  width: 64px;
+  border: 0;
+  background: none;
+  animation: float 3s ease-in-out infinite alternate;
+  animation-delay: var(--delay, 0s);
+}
+.balloon:nth-child(1) { left: 5%; top: 10%; }
+.balloon:nth-child(2) { left: 26%; top: 42%; }
+.balloon:nth-child(3) { left: 49%; top: 5%; }
+.balloon:nth-child(4) { right: 3%; top: 37%; }
+.balloon:nth-child(5) { left: 46%; top: 69%; }
+
+.balloon-body {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 78px;
+  border-radius: 50%;
+  background: var(--color);
+  font-size: 1.7rem;
+  box-shadow:
+    inset -8px -9px 15px rgba(0,0,0,.07),
+    0 8px 18px rgba(0,0,0,.1);
+}
+.balloon-body::after {
+  content: "";
+  position: absolute;
+  top: 78px;
+  width: 2px;
+  height: 32px;
+  background: #b69ca8;
+}
+.balloon.popped {
+  animation: pop .35s ease forwards;
+  pointer-events: none;
+}
+
+@keyframes float {
+  from { transform: translateY(0) rotate(-3deg); }
+  to { transform: translateY(-12px) rotate(3deg); }
+}
+@keyframes pop {
+  to { opacity: 0; transform: scale(1.5); }
+}
+
+.dialogue-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(97,66,86,.22);
+  backdrop-filter: blur(5px);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+.dialogue-card {
+  background: #FFF9FB;
+  width: min(420px, 100%);
+  padding: 30px 24px;
+  border: 2px solid #ffd5e0;
+  border-radius: 30px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  animation: dialoguePop .5s ease both;
+}
+.dialogue-card p {
+  color: #db7193;
+  font-size: 1.5rem;
+  margin: 12px 0 24px;
+}
+@keyframes dialoguePop {
+  from { opacity: 0; transform: translateY(20px) scale(.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Photos */
+.photo-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0 15px;
+}
+.arrow-btn {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  color: #fff;
+  background: linear-gradient(135deg, #FFB6C1, #F8A5B8);
+  font-size: 1.4rem;
+  box-shadow: 0 6px 15px #ffdce5;
+}
+.arrow-btn:disabled { opacity: .35; cursor: default; }
+
+.slideshow {
+  position: relative;
+  width: min(220px, 55vw);
+  height: min(275px, 33dvh);
+  min-height: 160px;
+  margin: auto;
+  border-radius: 23px;
+  overflow: hidden;
+  background: #19171d;
+  box-shadow: var(--shadow);
+}
+.photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity .6s ease;
+}
+.photo.show { opacity: 1; }
+.caption-box {
+  margin-top: 20px;
+  padding: 20px 16px;
+  min-height: 105px;
+  border-radius: 23px;
+  background: rgba(255,255,255,.9);
+  box-shadow: 0 8px 24px rgba(178,235,242,.25);
+  line-height: 1.7;
+  font-size: 1.08rem;
+  white-space: pre-line;
+}
+.caption-box.animate { animation: captionIn .5s ease; }
+
+@keyframes captionIn {
+  from { opacity: 0; transform: translateY(9px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.photo-error {
+  margin-top: 12px;
+  color: #ad4666;
+  font-size: .85rem;
+}
+.curtain {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50.2%;
+  z-index: 20;
+  background: repeating-linear-gradient(
+    90deg, #9a192b 0, #c42b3b 22px, #7a1221 44px
+  );
+  box-shadow: 0 0 30px rgba(0,0,0,.35);
+  transition: transform 4s cubic-bezier(.65,0,.35,1);
+}
+.curtain-left { left: 0; }
+.curtain-right { right: 0; }
+.curtain-open .curtain-left { transform: translateX(-105%); }
+.curtain-open .curtain-right { transform: translateX(105%); }
+
+/* Audio and ending */
+.black-scene {
+  background: #000;
+  color: #fff;
+  --fade: 1800ms;
+}
+
+/* Video is confined to the audio scene only. */
+#audioScene {
+  overflow: hidden;
+  isolation: isolate;
+}
+.audio-bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  z-index: 0;
+}
+.audio-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.42);
+  pointer-events: none;
+  z-index: 1;
+}
+#audioScene .audio-content {
+  position: relative;
+  z-index: 2;
+}
+
+.audio-content,
+.final-content {
+  width: min(640px, 100%);
+  text-align: center;
+}
+.headphones {
+  font-size: clamp(4rem, 16vw, 6rem);
+  margin-bottom: 26px;
+  animation: headphoneFloat 3s ease-in-out infinite;
+}
+@keyframes headphoneFloat {
+  50% { transform: translateY(-10px); }
+}
+.audio-content h1 {
+  color: #fff2f6;
+  font-size: clamp(1.7rem, 6vw, 2.7rem);
+  font-weight: 500;
+}
+.audio-button { margin-top: 35px; min-width: 135px; }
+.audio-status {
+  color: #d9b7c5;
+  font-size: .9rem;
+  margin-top: 20px;
+}
+.final-content h1 {
+  color: #ffd1df;
+  font-size: clamp(2.9rem, 12vw, 6rem);
+  letter-spacing: .05em;
+  text-shadow: 0 0 35px rgba(255,151,188,.22);
+}
+.final-content p {
+  color: #f4cedb;
+  margin-top: 24px;
+  font-size: clamp(1rem, 4vw, 1.4rem);
+}
+#finalScene { --fade: 2600ms; }
+
+#confettiCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 60;
+}
+
+@media (max-width: 480px) {
+  .scene { padding: 14px; }
+  .card {
+    padding: 24px 16px;
+    border-radius: 26px;
+    max-height: calc(100dvh - 28px);
+  }
+  .balloon, .balloon-body { width: 53px; }
+  .balloon-body { height: 67px; font-size: 1.4rem; }
+  .balloon-body::after { top: 67px; height: 25px; }
+  .choice-arena { gap: 0; }
+  .dodge-btn { padding: 13px 15px; font-size: .95rem; }
+}
+</style>
+</head>
+
+<body>
+<canvas id="confettiCanvas" aria-hidden="true"></canvas>
+
+<!-- INTRO -->
+<section class="scene visible active" id="introScene">
+  <div class="card">
+    <div class="intro-text" id="dialogue1">
+      FINALLY!!! The day has come.
+    </div>
+    <div class="intro-text" id="dialogue2" hidden>
+      Welcome Baby, Do you wish to move forward and see what you little hubby has made for you?
+    </div>
+    <div class="choice-arena" id="introChoices" hidden>
+      <div class="yes-slot">
+        <button class="btn" id="yesBtn">Yes</button>
+      </div>
+      <div class="dodge-zone">
+        <button class="btn dodge-btn" id="noBtn1"
+          aria-disabled="true" tabindex="-1">No</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAKE -->
+<section class="scene" id="cakeScene" inert>
+  <div class="card">
+    <h2>Blow the Candle Baby 🎂</h2>
+    <div class="cake-wrap">
+      <svg class="cake" viewBox="0 0 240 220"
+        role="img" aria-label="Birthday cake with a candle">
+        <ellipse cx="120" cy="195" rx="88" ry="12" fill="#FFD3DC"/>
+        <rect x="35" y="120" width="170" height="72" rx="18" fill="#FFB6C1"/>
+        <rect x="48" y="78" width="144" height="50" rx="16" fill="#FFF3F6"/>
+        <rect x="60" y="42" width="120" height="44" rx="14" fill="#B2EBF2"/>
+        <path d="M35 132c18 14 34-10 52 2s34-10 52 2 34-10 66 0v10H35z" fill="#FFC0CB"/>
+        <rect x="115" y="18" width="10" height="30" rx="5" fill="#F8A5B8"/>
+        <path class="flame" id="flame"
+          d="M120 4c7 10 10 14 10 19a10 10 0 0 1-20 0c0-5 3-9 10-19z"
+          fill="#FFD166"/>
+      </svg>
+    </div>
+    <div class="choice-arena">
+      <div class="yes-slot">
+        <button class="btn" id="blowBtn">Blow</button>
+      </div>
+      <div class="dodge-zone">
+        <button class="btn dodge-btn" id="noBtn2"
+          aria-disabled="true" tabindex="-1">Not Blow</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN WISH -->
+<section class="scene" id="wishScene" inert>
+  <div class="card slow-card">
+    <h1>HAPPY BIRTHDAY KANA</h1>
+    <p>Kana, yk i always think about you, not because i miss you or want you, but sometimes just wondering how lucky i got with you.</p>
+    <p>You've seen me in my good as well as bad times too, and you always supported and motivated me. And many more things that i still can't thank you enough for them.</p>
+    <p>And now on this special day of your birthday, i just wanna tell you how special you're for others too, to your family, to your friends, and.. to me.</p>
+    <p>you're not just an ordinary girl, you're someone's lovely daughter, somone's precious friends, someone's Idol, and for someone... you're his everything.</p>
+    <p>I am so greatfull to you for that, and thank you baby, for coming into my life as my precious girlfriend.</p>
+    <div class="button-row">
+      <button class="btn btn-blue" id="wishContinue">Continue</button>
+    </div>
+  </div>
+</section>
+
+<!-- BALLOONS -->
+<section class="scene" id="balloonScene" inert>
+  <div class="card slow-card">
+    <h1>Tap the Balloons 🎈</h1>
+    <p>Five little reasons you're special ♡</p>
+    <div class="balloon-area">
+      <button class="balloon" data-index="0"
+        style="--color:#FFB6C1; --delay:-.5s" aria-label="Pop balloon 1">
+        <span class="balloon-body">💖</span>
+      </button>
+      <button class="balloon" data-index="1"
+        style="--color:#B2EBF2; --delay:-1.5s" aria-label="Pop balloon 2">
+        <span class="balloon-body">🎀</span>
+      </button>
+      <button class="balloon" data-index="2"
+        style="--color:#E6D7FF; --delay:-.8s" aria-label="Pop balloon 3">
+        <span class="balloon-body">✨</span>
+      </button>
+      <button class="balloon" data-index="3"
+        style="--color:#FFC0CB; --delay:-2s" aria-label="Pop balloon 4">
+        <span class="balloon-body">🧸</span>
+      </button>
+      <button class="balloon" data-index="4"
+        style="--color:#B2EBF2; --delay:-1s" aria-label="Pop balloon 5">
+        <span class="balloon-body">🌸</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<div class="dialogue-overlay" id="balloonModal" hidden>
+  <div class="dialogue-card" role="dialog" aria-modal="true"
+    aria-labelledby="balloonText">
+    <div style="font-size:2.5rem" aria-hidden="true">💌</div>
+    <p id="balloonText"></p>
+    <button class="btn" id="closeDialogue">Aww ♡</button>
+  </div>
+</div>
+
+<!-- PHOTOS -->
+<section class="scene" id="photoScene" inert>
+  <div class="curtain curtain-left" aria-hidden="true"></div>
+  <div class="curtain curtain-right" aria-hidden="true"></div>
+  <div class="card">
+    <h2>My Cutie Pie</h2>
+    <div class="photo-controls">
+      <button class="arrow-btn" id="prevPhoto"
+        aria-label="Previous photo" disabled>←</button>
+      <span id="photoCounter" aria-live="polite">1 / 4</span>
+      <button class="arrow-btn" id="nextPhoto"
+        aria-label="Next photo" disabled>→</button>
+    </div>
+    <div class="slideshow">
+      <img class="photo show" src="Photo%201.jpg" alt="">
+      <img class="photo" src="Photo%202.jpg" alt="">
+      <img class="photo" src="Photo%203.jpg" alt="">
+      <img class="photo" src="Photo%204.jpg" alt="">
+    </div>
+    <div class="caption-box" id="captionBox" aria-live="polite"></div>
+    <p class="photo-error" id="photoError" hidden>
+      This photo could not load. Check its filename in the folder.
+    </p>
+    <div class="button-row" id="photoContinueWrap" hidden>
+      <button class="btn" id="photoContinue">Continue ♡</button>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO BACKGROUND: ONLY ON THE AUDIO SCREEN -->
+<section class="scene black-scene" id="audioScene" inert>
+  <video
+    class="audio-bg-video"
+    id="audioBgVideo"
+    muted
+    loop
+    playsinline
+    preload="none"
+    aria-hidden="true"
+    disablepictureinpicture
+    tabindex="-1">
+    <source src="video%201.mp4" type="video/mp4">
+  </video>
+
+  <div class="audio-bg-overlay" aria-hidden="true"></div>
+
+  <div class="audio-content">
+    <div class="headphones" aria-hidden="true">🎧</div>
+    <h1>Wear head phone for better experience</h1>
+    <button class="btn audio-button" id="audioButton">Start ♡</button>
+    <p class="audio-status" id="audioStatus" aria-live="polite"></p>
+  </div>
+</section>
+
+<!-- FINAL ENDING: STILL BLACK, NO VIDEO -->
+<section class="scene black-scene" id="finalScene" inert>
+  <div class="final-content">
+    <h1>I LOVE YOU</h1>
+    <p>Happy birthday once again ♡</p>
+  </div>
+</section>
+
+<audio id="birthdayAudio" preload="none"></audio>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<script>
+const $ = id => document.getElementById(id);
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+const AUDIO_FILES = [
+  "Audio 1.mp3",
+  "Audio 1.m4a",
+  "Audio 1.wav",
+  "Audio 1.ogg"
+];
+
+const captions = [
+  "The most beautiful person of my life.",
+  "ufff those eyes, gorgeous👉🏻👈🏻. with cute fluffy cheeks😗",
+  "ehh... where did these come from? Cute lol.",
+  "And lastly a beautiful Smile i could die for😝."
+];
+
+const balloonMessages = [
+  "The reason for my smile.",
+  "My very special person.",
+  "My jaan.",
+  "Cat mumma",
+  "wifie mwehehe"
+];
+
+/* Background video: always silent and confined to audioScene. */
+const audioBgVideo = $("audioBgVideo");
+audioBgVideo.muted = true;
+audioBgVideo.defaultMuted = true;
+
+function playBackgroundVideo() {
+  audioBgVideo.muted = true;
+  const attempt = audioBgVideo.play();
+  if (attempt) attempt.catch(() => {
+    /* Start button retries playback if the browser blocks it. */
+  });
+}
+
+/* Scene transitions */
+let currentScene = $("introScene");
+let transitioning = false;
+
+async function goToScene(id, fadeOut = 900, fadeIn = 900) {
+  if (transitioning || currentScene.id === id) return false;
+  transitioning = true;
+
+  const previous = currentScene;
+  const next = $(id);
+
+  previous.style.setProperty("--fade", fadeOut + "ms");
+  previous.classList.add("leaving");
+  previous.classList.remove("active");
+  previous.inert = true;
+
+  await wait(fadeOut);
+
+  previous.classList.remove("visible", "leaving");
+
+  /* Stop video once the audio scene has completely faded out. */
+  if (previous.id === "audioScene") {
+    audioBgVideo.pause();
+  }
+
+  next.style.setProperty("--fade", fadeIn + "ms");
+  next.classList.add("visible");
+  next.inert = false;
+
+  /* Begin video as the audio scene fades in. */
+  if (next.id === "audioScene") {
+    audioBgVideo.currentTime = 0;
+    playBackgroundVideo();
+  }
+
+  void next.offsetWidth;
+  next.classList.add("active");
+
+  currentScene = next;
+  await wait(fadeIn);
+  transitioning = false;
+  return true;
+}
+
+/* Confetti */
+let celebrate = () => {};
+if (typeof window.confetti === "function") {
+  const fire = window.confetti.create($("confettiCanvas"), {
+    resize: true,
+    useWorker: true
+  });
+
+  celebrate = (count = 100) => fire({
+    particleCount: count,
+    spread: 85,
+    origin: { y: .65 },
+    colors: ["#FFB6C1", "#B2EBF2", "#E6D7FF", "#FFC0CB"]
+  });
+}
+
+/* Local dodging */
+function makeDodge(button) {
+  const zone = button.parentElement;
+  let lastMove = 0;
+
+  const clamp = (value, min, max) =>
+    Math.min(Math.max(value, min), max);
+
+  function dodge(event) {
+    if (event.cancelable) event.preventDefault();
+    event.stopPropagation();
+
+    if (performance.now() - lastMove < 100) return;
+    lastMove = performance.now();
+
+    const zoneRect = zone.getBoundingClientRect();
+    const buttonRect = button.getBoundingClientRect();
+    const halfW = buttonRect.width / 2;
+    const halfH = buttonRect.height / 2;
+    const padding = 9;
+    const centerX = zone.clientWidth / 2;
+    const centerY = zone.clientHeight / 2;
+
+    const minX = halfW + padding;
+    const maxX = Math.max(minX, zone.clientWidth - halfW - padding);
+    const minY = halfH + padding;
+    const maxY = Math.max(minY, zone.clientHeight - halfH - padding);
+
+    const pointerX = event.clientX - zoneRect.left;
+    const pointerY = event.clientY - zoneRect.top;
+
+    const currentX = buttonRect.left - zoneRect.left + halfW;
+    const currentY = buttonRect.top - zoneRect.top + halfH;
+
+    const candidates = [
+      [centerX - 25, centerY - 40],
+      [centerX + 25, centerY - 40],
+      [centerX - 25, centerY + 40],
+      [centerX + 25, centerY + 40],
+      [centerX, centerY - 45],
+      [centerX, centerY + 45]
+    ].map(([x, y]) => [
+      clamp(x, minX, maxX),
+      clamp(y, minY, maxY)
+    ]);
+
+    candidates.sort((a, b) => {
+      const score = point =>
+        Math.hypot(point[0] - pointerX, point[1] - pointerY) +
+        .4 * Math.hypot(point[0] - currentX, point[1] - currentY);
+      return score(b) - score(a);
+    });
+
+    button.style.left = candidates[0][0] + "px";
+    button.style.top = candidates[0][1] + "px";
+  }
+
+  button.addEventListener("pointerenter", dodge);
+  button.addEventListener("pointerdown", dodge);
+  button.addEventListener("click", event => {
+    event.preventDefault();
+    event.stopPropagation();
+  });
+
+  new ResizeObserver(() => {
+    button.style.left = "50%";
+    button.style.top = "50%";
+  }).observe(zone);
+}
+
+makeDodge($("noBtn1"));
+makeDodge($("noBtn2"));
+
+/* Intro */
+async function startIntro() {
+  await wait(250);
+  $("dialogue1").classList.add("show");
+  await wait(1200 + 2500);
+  $("dialogue1").classList.remove("show");
+  await wait(1200);
+
+  $("dialogue1").hidden = true;
+  $("dialogue2").hidden = false;
+  void $("dialogue2").offsetWidth;
+  $("dialogue2").classList.add("show");
+
+  await wait(700);
+  $("introChoices").hidden = false;
+  $("introChoices").classList.add("enter");
+}
+
+$("yesBtn").addEventListener("click", () => {
+  goToScene("cakeScene");
+});
+
+let candleBlown = false;
+$("blowBtn").addEventListener("click", async () => {
+  if (candleBlown || transitioning) return;
+  candleBlown = true;
+  $("blowBtn").disabled = true;
+  $("flame").classList.add("out");
+  celebrate();
+  await wait(1200);
+  goToScene("wishScene", 900, 2200);
+});
+
+$("wishContinue").addEventListener("click", () => {
+  goToScene("balloonScene", 900, 2200);
+});
+
+/* Balloons */
+const balloons = [...document.querySelectorAll(".balloon")];
+let poppedCount = 0;
+let lastBalloon = null;
+
+balloons.forEach(balloon => {
+  balloon.addEventListener("click", () => {
+    if (balloon.disabled || transitioning) return;
+
+    balloon.disabled = true;
+    balloon.classList.add("popped");
+    poppedCount++;
+    lastBalloon = balloon;
+
+    $("balloonText").textContent =
+      balloonMessages[Number(balloon.dataset.index)];
+
+    $("closeDialogue").textContent =
+      poppedCount === balloons.length ? "See my Cutie ♡" : "Aww ♡";
+
+    $("balloonScene").inert = true;
+    $("balloonModal").hidden = false;
+    $("closeDialogue").focus();
+    celebrate(35);
+  });
+});
+
+$("closeDialogue").addEventListener("click", async () => {
+  $("balloonModal").hidden = true;
+  $("balloonScene").inert = false;
+
+  if (poppedCount === balloons.length) {
+    openPhotos();
+  } else {
+    const nextBalloon = balloons.find(balloon => !balloon.disabled);
+    if (nextBalloon) nextBalloon.focus();
+  }
+});
+
+/* Photos */
+const photos = [...document.querySelectorAll(".photo")];
+let photoIndex = 0;
+let photosReady = false;
+let photoSectionOpened = false;
+
+photos.forEach(photo => {
+  photo.addEventListener("error", () => {
+    photo.dataset.failed = "true";
+    if (photos[photoIndex] === photo) $("photoError").hidden = false;
+  });
+});
+
+function showPhoto(index) {
+  photoIndex = Math.max(0, Math.min(index, photos.length - 1));
+
+  photos.forEach((photo, i) => {
+    photo.classList.toggle("show", i === photoIndex);
+  });
+
+  $("captionBox").textContent = captions[photoIndex];
+  $("captionBox").classList.remove("animate");
+  void $("captionBox").offsetWidth;
+  $("captionBox").classList.add("animate");
+
+  $("photoCounter").textContent = `${photoIndex + 1} / ${photos.length}`;
+  $("prevPhoto").disabled = !photosReady || photoIndex === 0;
+  $("nextPhoto").disabled =
+    !photosReady || photoIndex === photos.length - 1;
+
+  $("photoContinueWrap").hidden = photoIndex !== photos.length - 1;
+  $("photoError").hidden = photos[photoIndex].dataset.failed !== "true";
+}
+
+async function openPhotos() {
+  if (photoSectionOpened) return;
+  photoSectionOpened = true;
+
+  showPhoto(0);
+  await goToScene("photoScene");
+  await wait(300);
+  $("photoScene").classList.add("curtain-open");
+  await wait(4000);
+
+  photosReady = true;
+  showPhoto(0);
+}
+
+$("prevPhoto").addEventListener("click", () => {
+  if (photosReady) showPhoto(photoIndex - 1);
+});
+$("nextPhoto").addEventListener("click", () => {
+  if (photosReady) showPhoto(photoIndex + 1);
+});
+$("photoContinue").addEventListener("click", () => {
+  goToScene("audioScene", 1800, 1800);
+});
+
+/* Audio */
+const audio = $("birthdayAudio");
+const audioButton = $("audioButton");
+let audioFileIndex = 0;
+let wantsPlayback = false;
+let audioStarted = false;
+let audioFinished = false;
+
+function selectAudio(index) {
+  audioFileIndex = index;
+  audio.src = encodeURI(AUDIO_FILES[index]);
+  audio.load();
+}
+
+async function playAudio() {
+  if (audioFinished) return;
+
+  $("audioStatus").textContent = "";
+  audioButton.disabled = true;
+
+  try {
+    await audio.play();
+  } catch (error) {
+    if (error.name === "NotAllowedError") {
+      wantsPlayback = false;
+      $("audioStatus").textContent = "Tap Start again to listen ♡";
+    } else if (
+      audioFileIndex === AUDIO_FILES.length - 1 &&
+      audio.error
+    ) {
+      $("audioStatus").textContent =
+        "Audio not found. Add Audio 1.mp3 to the same folder.";
+    }
+  } finally {
+    audioButton.disabled = false;
+  }
+}
+
+audioButton.addEventListener("click", () => {
+  if (audioFinished) return;
+
+  /* Retry muted video playback within the user gesture. */
+  if (audioBgVideo.paused) playBackgroundVideo();
+
+  if (!audio.paused) {
+    wantsPlayback = false;
+    audio.pause();
+  } else {
+    wantsPlayback = true;
+    if (!audio.getAttribute("src")) selectAudio(0);
+    playAudio();
+  }
+});
+
+audio.addEventListener("playing", () => {
+  audioStarted = true;
+  audioButton.disabled = false;
+  audioButton.textContent = "Pause ♡";
+  $("audioStatus").textContent = "";
+});
+
+audio.addEventListener("pause", () => {
+  if (!audioFinished) {
+    audioButton.textContent = audioStarted ? "Play ♡" : "Start ♡";
+  }
+});
+
+audio.addEventListener("error", () => {
+  if (audioFinished) return;
+
+  if (audioFileIndex < AUDIO_FILES.length - 1) {
+    selectAudio(audioFileIndex + 1);
+    if (wantsPlayback) playAudio();
+  } else {
+    wantsPlayback = false;
+    audioButton.disabled = false;
+    audioButton.textContent = "Start ♡";
+    $("audioStatus").textContent =
+      "Audio not found. Add Audio 1.mp3 to the same folder, then refresh.";
+  }
+});
+
+audio.addEventListener("ended", async () => {
+  if (audioFinished) return;
+  audioFinished = true;
+  wantsPlayback = false;
+  audioButton.disabled = true;
+
+  /* Video fades out with the audio screen; ending stays black. */
+  await goToScene("finalScene", 1800, 2600);
+});
+
+startIntro();
+</script>
+</body>
+</html>
